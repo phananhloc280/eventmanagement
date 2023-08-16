@@ -1,0 +1,218 @@
+
+  let today = new Date();
+
+  let today_string = today.toISOString().split('T')[0];
+
+
+  let nextMonth = new Date(today);
+
+  nextMonth.setMonth(nextMonth.getMonth() + 2);
+  let nextMonth_string = nextMonth.toISOString().split('T')[0];
+
+  let detailTaskTracking = document.querySelector(".detail-taskTracking");
+  let detailLeft = document.querySelector(".detail-left");
+  let detailRight = document.querySelector(".detail-right");
+  let weekThead = document.querySelector(".week-thead .week");
+  let firstDayThead = document.querySelector(".firstDay-thead .firstDay");
+  let headerThead = document.querySelector(".header-thead .header-taskTracking");
+  let detailDay = document.querySelector(".detailDay");
+
+  let createSectionBtn = document.querySelector(".create-section-btn");
+  let startDate = document.querySelector(".start-container .start");
+  let endDate = document.querySelector(".end-container .end");
+  let colWeek = document.querySelector(".week");
+  let colFirstDay = document.querySelector(".firstDay");
+
+
+  startDate.value = today_string;
+  endDate.value = nextMonth_string;
+  let selectedStartDate = new Date(startDate.value);
+  let selectedEndDate = new Date(endDate.value);
+
+  startDateInput.addEventListener("change", updatePage);
+  endDateInput.addEventListener("change", updatePage);
+
+  function updatePage() {
+    let startDate = new Date(startDate.value);
+    let endDate = new Date(endDate.value);
+  }
+
+  today.setUTCHours(0, 0, 0, 0);
+  nextMonth.setUTCHours(0, 0, 0, 0);
+
+  // Tính số mili giây giữa hai ngày
+  let timeDiff = endDate.getTime() - startDate.getTime();
+
+  // Tính số ngày
+  let daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+  //Tạo week đầu tiên
+
+  let dayOfWeek = selectedStartDate.getDay();
+
+  let cellDay = new Date(selectedStartDate); // Tạo một bản sao của ngày hiện tại
+  cellDay.setDate(selectedStartDate.getDate() - dayOfWeek + 1);
+  let cell = detailDay.insertCell(0);
+
+  cell.innerHTML = cellDay.getDate();
+  for (let i = 1; i < 7; ++i) {
+    let cell = detailDay.insertCell(i);
+    cell.innerHTML = cellDay.getDate() + i;
+    var cellIndex = i;
+  }
+
+
+  //Tạo các week còn lại
+  //Check xem cần tạo bao nhiêu week
+  let noWeek = daysDiff / 7;
+
+  for (let j = 2; j <= noWeek; ++j) {
+    // Tạo tên week
+    var headerCellWeek = document.createElement("th");
+    headerCellWeek.setAttribute("colspan", "7");
+    headerCellWeek.setAttribute("scope", "col");
+    headerCellWeek.style.left = "0px";
+    headerCellWeek.textContent = "Week " + j;
+    colWeek.appendChild(headerCellWeek);
+
+    // Tạo first Day
+    var headerCellFirstDay = document.createElement("th");
+    headerCellFirstDay.setAttribute("colspan", "7");
+    headerCellFirstDay.setAttribute("scope", "col");
+    headerCellFirstDay.style.left = "0px";
+    headerCellFirstDay.textContent = cellDay.toISOString().split('T')[0];
+    colFirstDay.appendChild(headerCellFirstDay);
+
+    // Tạo detail Day
+    for (let i = 0; i < 7; ++i) {
+      let cell = detailDay.insertCell();
+      let date = new Date(cellDay);
+      date.setDate(cellDay.getDate() + i);
+      cell.innerHTML = date.getDate();
+    }
+    cellDay.setDate(cellDay.getDate() + 7);
+  }
+
+} else if (currentURL.endsWith('hr-plan.html')) {
+  let hrMapBtn = document.querySelector('.tab ul li:nth-child(3)');
+  hrMapBtn.classList.add('HRMapActive');
+
+  let createHRMap = document.querySelector('#create-hr-map'),
+    title = document.querySelector("#title"),
+    link = document.querySelector("#link"),
+    createHRMapWrapper = document.querySelector(".create-hr-map-wrapper"),
+    createHRMapBtn = document.querySelector(".create-hr-map-wrapper #create-hr-map-btn"),
+    listHRMapTable = document.querySelector("#list-hr-map-table"),
+    detailRow = document.querySelector("#detail-row");
+
+  let createHRMapCounter = 0;
+
+  createHRMap.addEventListener("click", function (event) {
+    event.preventDefault(); // Ngăn chặn trình duyệt tải lại trang
+    createHRMapCounter++;
+    if (createHRMapCounter % 2 === 1) {
+      createHRMapWrapper.classList.add("createHRMapActive");
+    } else {
+      createHRMapWrapper.classList.remove("createHRMapActive");
+    }
+  });
+
+  createHRMapBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+    if (title.value.trim() === "" || link.value.trim() === "") {
+      alert("Please fill all information before submitting.");
+      return; // Dừng xử lý tiếp theo nếu eventName rỗng
+    }
+
+    var row = detailRow.insertRow(0);
+
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+
+    cell1.innerHTML = "1";
+    cell2.innerHTML = title.value;
+    cell3.innerHTML = link.value;
+
+
+    title.value = "";
+    link.value = "";
+
+    createHRMapWrapper.classList.remove("createHRMapActive");
+  });
+} else if (currentURL.endsWith('equipment-checklist.html')) {
+
+  let checklistBtn = document.querySelector('.tab ul li:nth-child(4)');
+  checklistBtn.classList.add('checklistActive');
+
+  let createChecklist = document.querySelector('#create-checklist'),
+    name = document.querySelector(".create-checklist-wrapper #name"),
+    description = document.querySelector(".create-checklist-wrapper #description"),
+    unit = document.querySelector("#unit"),
+    quantity = document.querySelector("#quantity"),
+    vendor = document.querySelector("#vendor"),
+    classes = document.querySelector("#class"),
+    incharge = document.querySelector("#incharge"),
+    createChecklistWrapper = document.querySelector(".create-checklist-wrapper"),
+    createChecklistBtn = document.querySelector(".create-checklist-wrapper #create-checklist-btn"),
+    listChecklistTable = document.querySelector("#list-checklist-table"),
+    detailRow = document.querySelector("#detail-row");
+
+  let createChecklistCounter = 0;
+  
+  createChecklist.addEventListener("click", function (event) {
+    event.preventDefault(); // Ngăn chặn trình duyệt tải lại trang
+    createChecklistCounter++;
+    if (createChecklistCounter % 2 === 1) {
+      createChecklistWrapper.classList.add("createChecklistActive");
+    } else {
+      createChecklistWrapper.classList.remove("createChecklistActive");
+    }
+  });
+
+  createChecklistBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+    let arr = [name.value, description.value, unit.value, quantity.value, vendor.value, classes.value];
+  console.log(arr);
+    if (name.value.trim() === "" || unit.value.trim() === "" || quantity.value.trim() === "" || vendor.value.trim() === "" || classes.value.trim() === "") {
+      alert("Please fill all information before submitting.");
+      return; // Dừng xử lý tiếp theo nếu eventName rỗng
+    }
+
+    let row = detailRow.insertRow(0);
+    var cell1 = row.insertCell(0)
+    for (let i = 1; i <= 6; ++i) {
+      console.log("Test");
+      let cell = row.insertCell(i);
+      cell.innerHTML = arr[i - 1];
+      
+    };
+    
+    var cell8 = row.insertCell(7);
+    var cell9 = row.insertCell(8);
+    var cell10 = row.insertCell(9);
+    var cell11 = row.insertCell(10);
+    var cell12 = row.insertCell(11);
+
+    cell1.innerHTML = "1";
+    cell8.innerHTML="<a href=\"#\" class=\"event-status\">On Processing</a>";
+    cell9.innerHTML = incharge.value;
+    cell10.innerHTML = '<input type="checkbox">';
+    cell11.innerHTML = '<input type="checkbox">';
+    cell12.innerHTML = '<input type="checkbox">';
+
+
+    name.value = "";
+    description.value = "";
+    unit.value = "";
+    quantity.value = "";
+    vendor.value = "";
+    classes.value = "";
+
+    createChecklistWrapper.classList.remove("createChecklistActive");
+  });
+};
+
+
+
+

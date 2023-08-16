@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#username").on("blur", function() {
+        var username = $(this).val();
+        $.ajax({
+          url: "check_username.php",
+          type: "POST",
+          data: { username: username },
+          success: function(response) {
+            $("#username_status").html(response);
+          }
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <label for="username">Username:</label>
+  <input type="text" id="username" name="username">
+  <div id="username_status"></div>
+</body>
+</html>
